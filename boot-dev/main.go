@@ -1,11 +1,17 @@
 package main
 
-func maxMessages(thresh int) int {
-	i := 0
-	totalCost := 100
-	for ; totalCost <= thresh; i++ {
-		totalCost += 100 + i
+func getMaxMessagesToSend(costMultiplier float64, maxCostInPennies int) int {
+	actualCostInPennies := 1.0
+	maxMessagesToSend := 1
+	balance := float64(maxCostInPennies) - actualCostInPennies
+	for balance > 0 {
+		actualCostInPennies *= costMultiplier
+		balance -= actualCostInPennies
+		maxMessagesToSend++
 	}
-
-	return i
+	if balance < 0 {
+		maxMessagesToSend--
+	}
+	return maxMessagesToSend
 }
+

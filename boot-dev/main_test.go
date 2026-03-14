@@ -7,50 +7,50 @@ import (
 
 func Test(t *testing.T) {
 	type testCase struct {
-		thresh   int
-		expected int
+		costMultiplier   float64
+		maxCostInPennies int
+		expected         int
 	}
+
 	runCases := []testCase{
-		{103, 1},
-		{205, 2},
-		{1000, 9},
+		{1.1, 5, 4},
+		{1.3, 10, 5},
+		{1.35, 25, 7},
 	}
 
 	submitCases := append(runCases, []testCase{
-		{100, 1},
-		{3000, 26},
-		{4000, 34},
-		{5000, 41},
-		{0, 0},
+		{1.2, 1, 1},
+		{1.2, 15, 7},
+		{1.3, 20, 7},
 	}...)
 
 	testCases := runCases
 	if withSubmit {
 		testCases = submitCases
 	}
-
 	skipped := len(submitCases) - len(testCases)
+
 	passCount := 0
 	failCount := 0
 
 	for _, test := range testCases {
-		output := maxMessages(test.thresh)
+		output := getMaxMessagesToSend(test.costMultiplier, test.maxCostInPennies)
 		if output != test.expected {
 			failCount++
 			t.Errorf(`---------------------------------
-Inputs:     (%v)
+Inputs:     (%v, %v)
 Expecting:  %v
 Actual:     %v
 Fail
-`, test.thresh, test.expected, output)
+`, test.costMultiplier, test.maxCostInPennies, test.expected, output)
 		} else {
 			passCount++
 			fmt.Printf(`---------------------------------
-Inputs:     (%v)
+Inputs:     (%v, %v)
 Expecting:  %v
 Actual:     %v
 Pass
-`, test.thresh, test.expected, output)
+`, test.costMultiplier, test.maxCostInPennies, test.expected, output)
 		}
 	}
 
