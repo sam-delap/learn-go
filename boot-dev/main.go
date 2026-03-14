@@ -1,20 +1,18 @@
 package main
 
-import "unicode/utf8"
+import "strings"
 
-func getNameCounts(names []string) map[rune]map[string]int {
-	nameCountMap := make(map[rune]map[string]int)
-	for _, name := range names {
-		firstRune, _ := utf8.DecodeRuneInString(name)
-		if _, ok := nameCountMap[firstRune]; !ok {
-			nameCountMap[firstRune] = make(map[string]int)
-			nameCountMap[firstRune][name] = 1
-		} else if val, ok := nameCountMap[firstRune][name]; !ok {
-			nameCountMap[firstRune][name] = 1
-		} else {
-			nameCountMap[firstRune][name] = val + 1
+func countDistinctWords(messages []string) int {
+	wordCounter := make(map[string]struct{})
+	for _, msg := range messages {
+		words := strings.Fields(strings.ToLower(msg))
+		for _, word := range words {
+			_, ok := wordCounter[word]; if !ok {
+				wordCounter[word] = struct{}{}
+			}
 		}
 	}
-	
-	return nameCountMap
+
+	return len(wordCounter)
 }
+
