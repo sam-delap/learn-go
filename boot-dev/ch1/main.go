@@ -3,12 +3,10 @@ package main
 import "fmt"
 
 func main() {
-	// fmt.Println("Starting Textio server...")
-	// Initialize variables
-	var smsSendingLimit int
-	var costPerSMS float64
-	var hasPermission bool
-	var username string
+	messageStart := "Happy birthday! You are now"
+	age := 21
+	messageEnd := "years old"
 
-	fmt.Printf("%v %.2f %v %q\n", smsSendingLimit, costPerSMS, hasPermission, username)
+	fmt.Println(messageStart, age, messageEnd)
+
 }
