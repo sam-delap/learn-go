@@ -7,48 +7,50 @@ import (
 
 func Test(t *testing.T) {
 	type testCase struct {
-		numMessages int
-		expected    float64
+		thresh   int
+		expected int
 	}
 	runCases := []testCase{
-		{10, 10.45},
-		{20, 21.9},
+		{103, 1},
+		{205, 2},
+		{1000, 9},
 	}
 
 	submitCases := append(runCases, []testCase{
-		{0, 0.0},
-		{1, 1.0},
-		{5, 5.10},
-		{30, 34.35},
+		{100, 1},
+		{3000, 26},
+		{4000, 34},
+		{5000, 41},
+		{0, 0},
 	}...)
 
 	testCases := runCases
 	if withSubmit {
 		testCases = submitCases
 	}
-	skipped := len(submitCases) - len(testCases)
 
+	skipped := len(submitCases) - len(testCases)
 	passCount := 0
 	failCount := 0
 
 	for _, test := range testCases {
-		output := bulkSend(test.numMessages)
-		if fmt.Sprintf("%.2f", output) != fmt.Sprintf("%.2f", test.expected) {
+		output := maxMessages(test.thresh)
+		if output != test.expected {
 			failCount++
 			t.Errorf(`---------------------------------
 Inputs:     (%v)
-Expecting:  %.2f
-Actual:     %.2f
+Expecting:  %v
+Actual:     %v
 Fail
-`, test.numMessages, test.expected, output)
+`, test.thresh, test.expected, output)
 		} else {
 			passCount++
 			fmt.Printf(`---------------------------------
 Inputs:     (%v)
-Expecting:  %.2f
-Actual:     %.2f
+Expecting:  %v
+Actual:     %v
 Pass
-`, test.numMessages, test.expected, output)
+`, test.thresh, test.expected, output)
 		}
 	}
 
