@@ -2,25 +2,39 @@ package main
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 )
 
 func Test(t *testing.T) {
 	type testCase struct {
-		msg      []string
-		badWords []string
-		expected int
+		rows, cols int
+		expected   [][]int
 	}
 
 	runCases := []testCase{
-		{[]string{"hey", "there", "john"}, []string{"crap", "shoot", "frick", "dang"}, -1},
-		{[]string{"ugh", "oh", "my", "frick"}, []string{"crap", "shoot", "frick", "dang"}, 3},
+		{3, 3, [][]int{
+			{0, 0, 0},
+			{0, 1, 2},
+			{0, 2, 4},
+		}},
+		{4, 4, [][]int{
+			{0, 0, 0, 0},
+			{0, 1, 2, 3},
+			{0, 2, 4, 6},
+			{0, 3, 6, 9},
+		}},
 	}
 
 	submitCases := append(runCases, []testCase{
-		{[]string{"what", "the", "shoot", "I", "hate", "that", "crap"}, []string{"crap", "shoot", "frick", "dang"}, 2},
-		{[]string{"crap", "shoot", "frick", "dang"}, []string{""}, -1},
-		{[]string{""}, nil, -1},
+		{5, 7, [][]int{
+			{0, 0, 0, 0, 0, 0, 0},
+			{0, 1, 2, 3, 4, 5, 6},
+			{0, 2, 4, 6, 8, 10, 12},
+			{0, 3, 6, 9, 12, 15, 18},
+			{0, 4, 8, 12, 16, 20, 24},
+		}},
+		{0, 0, [][]int{}},
 	}...)
 
 	testCases := runCases
@@ -34,31 +48,27 @@ func Test(t *testing.T) {
 	failCount := 0
 
 	for _, test := range testCases {
-		output := indexOfFirstBadWord(test.msg, test.badWords)
-		if output != test.expected {
+		output := createMatrix(test.rows, test.cols)
+		if !reflect.DeepEqual(output, test.expected) {
 			failCount++
 			t.Errorf(`---------------------------------
-Test Failed:
-message:
+Test Failed: %v x %v matrix
+Expecting:
 %v
-bad words:
+Actual:
 %v
-Expecting:  %v
-Actual:     %v
 Fail
-`, sliceWithBullets(test.msg), sliceWithBullets(test.badWords), test.expected, output)
+`, test.rows, test.cols, formatMatrix(test.expected), formatMatrix(output))
 		} else {
 			passCount++
 			fmt.Printf(`---------------------------------
-Test Passed:
-message:
+Test Passed: %v x %v matrix
+Expecting:
 %v
-bad words:
+Actual:
 %v
-Expecting:  %v
-Actual:     %v
 Pass
-`, sliceWithBullets(test.msg), sliceWithBullets(test.badWords), test.expected, output)
+`, test.rows, test.cols, formatMatrix(test.expected), formatMatrix(output))
 		}
 	}
 
@@ -68,24 +78,15 @@ Pass
 	} else {
 		fmt.Printf("%d passed, %d failed\n", passCount, failCount)
 	}
+
 }
 
-func sliceWithBullets[T any](slice []T) string {
-	if slice == nil {
-		return "  <nil>"
+func formatMatrix(matrix [][]int) string {
+	var result string
+	for _, row := range matrix {
+		result += fmt.Sprintf("%v\n", row)
 	}
-	if len(slice) == 0 {
-		return "  []"
-	}
-	output := ""
-	for i, item := range slice {
-		form := "  - %#v\n"
-		if i == (len(slice) - 1) {
-			form = "  - %#v"
-		}
-		output += fmt.Sprintf(form, item)
-	}
-	return output
+	return result
 }
 
 // withSubmit is set at compile time depending
