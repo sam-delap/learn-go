@@ -1,12 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"unicode/utf8"
+)
 
 func main() {
-	messageStart := "Happy birthday! You are now"
-	age := 21
-	messageEnd := "years old"
-
-	fmt.Println(messageStart, age, messageEnd)
+	const name = "🐻"
+	fmt.Printf("constant 'name' byte length: %d\n", len(name))
+	fmt.Printf("constant 'name' rune length: %d\n", utf8.RuneCountInString(name))
+	fmt.Println("=====================================")
+	fmt.Printf("Hi %s, so good to have you back in the arcanum\n", name)
 
 }
