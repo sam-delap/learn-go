@@ -4,9 +4,15 @@ import (
 	"errors"
 )
 
-func divide(x, y float64) (float64, error) {
-	if y == 0 {
-		return 0.0, errors.New("no dividing by 0")
+func validateStatus(status string) error {
+	if status == "" {
+		return errors.New("status cannot be empty")
 	}
-	return x / y, nil
+
+	if len(status) > 140 {
+		return errors.New("status exceeds 140 characters")
+	}
+
+	return nil
 }
+
