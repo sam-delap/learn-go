@@ -7,20 +7,20 @@ import (
 
 func Test(t *testing.T) {
 	type testCase struct {
-		nums     []int
+		msg      []string
+		badWords []string
 		expected int
 	}
 
 	runCases := []testCase{
-		{[]int{1, 2, 3}, 6},
-		{[]int{1, 2, 3, 4, 5}, 15},
+		{[]string{"hey", "there", "john"}, []string{"crap", "shoot", "frick", "dang"}, -1},
+		{[]string{"ugh", "oh", "my", "frick"}, []string{"crap", "shoot", "frick", "dang"}, 3},
 	}
 
 	submitCases := append(runCases, []testCase{
-		{[]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, 55},
-		{[]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, 120},
-		{[]int{}, 0},
-		{[]int{5}, 5},
+		{[]string{"what", "the", "shoot", "I", "hate", "that", "crap"}, []string{"crap", "shoot", "frick", "dang"}, 2},
+		{[]string{"crap", "shoot", "frick", "dang"}, []string{""}, -1},
+		{[]string{""}, nil, -1},
 	}...)
 
 	testCases := runCases
@@ -34,25 +34,31 @@ func Test(t *testing.T) {
 	failCount := 0
 
 	for _, test := range testCases {
-		output := sum(test.nums...)
+		output := indexOfFirstBadWord(test.msg, test.badWords)
 		if output != test.expected {
 			failCount++
 			t.Errorf(`---------------------------------
-Inputs:
+Test Failed:
+message:
+%v
+bad words:
 %v
 Expecting:  %v
 Actual:     %v
 Fail
-`, sliceWithBullets(test.nums), test.expected, output)
+`, sliceWithBullets(test.msg), sliceWithBullets(test.badWords), test.expected, output)
 		} else {
 			passCount++
 			fmt.Printf(`---------------------------------
-Inputs:
+Test Passed:
+message:
+%v
+bad words:
 %v
 Expecting:  %v
 Actual:     %v
 Pass
-`, sliceWithBullets(test.nums), test.expected, output)
+`, sliceWithBullets(test.msg), sliceWithBullets(test.badWords), test.expected, output)
 		}
 	}
 

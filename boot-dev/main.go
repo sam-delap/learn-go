@@ -1,10 +1,13 @@
 package main
 
-func sum(nums ...int) int {
-	sumVal := 0
-	for i := 0; i < len(nums); i++ {
-		sumVal += nums[i]
+func indexOfFirstBadWord(msg []string, badWords []string) int {
+	for i, word := range msg {
+		for _, nonoWord := range badWords {
+			if word == nonoWord {
+				return i
+			}
+		}
 	}
-
-	return sumVal
+	return -1
 }
+
