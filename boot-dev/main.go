@@ -1,21 +1,13 @@
 package main
 
-import (
-	"errors"
-)
+func getMessageCosts(messages []string) []float64 {
+	numMessages := len(messages)
+	msgCosts := make([]float64, numMessages, numMessages)
 
-const (
-	planFree = "free"
-	planPro  = "pro"
-)
-
-func getMessageWithRetriesForPlan(plan string, messages [3]string) ([]string, error) {
-	if plan == planPro {
-		return messages[:], nil
-	} else if plan == planFree {
-		return messages[:2], nil
-	} else {
-		return nil, errors.New("unsupported plan")
+	for i := 0; i < numMessages; i++ {
+		msgCosts[i] = float64(len(messages[i])) * 0.01
 	}
 
+	return msgCosts
 }
+
