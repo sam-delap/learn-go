@@ -1,55 +1,21 @@
 package main
 
-type notification interface {
-	importance() int
+import (
+	"fmt"
+)
+
+type divideError struct {
+	dividend float64
 }
 
-type directMessage struct {
-	senderUsername string
-	messageContent string
-	priorityLevel  int
-	isUrgent       bool
+func (e divideError) Error() string {
+	return fmt.Sprintf("can not divide %v by zero", e.dividend)
 }
 
-type groupMessage struct {
-	groupName      string
-	messageContent string
-	priorityLevel  int
-}
-
-type systemAlert struct {
-	alertCode      string
-	messageContent string
-}
-
-func (dm directMessage) importance() int {
-	if dm.isUrgent {
-		return 50
+func divide(dividend, divisor float64) (float64, error) {
+	if divisor == 0 {
+		return 0, divideError{dividend: dividend}
 	}
-
-	return dm.priorityLevel
+	return dividend / divisor, nil
 }
 
-func (gm groupMessage) importance() int {
-	return gm.priorityLevel
-}
-
-func (alert systemAlert) importance() int {
-	return 100
-}
-
-func processNotification(n notification) (string, int) {
-	switch n.(type) {
-	case directMessage:
-		n, _ := n.(directMessage)
-		return n.senderUsername, n.importance()
-	case groupMessage:
-		n, _ := n.(groupMessage)
-		return n.groupName, n.importance()
-	case systemAlert:
-		n, _ := n.(systemAlert)
-		return n.alertCode, n.importance()
-	default:
-		return "", 0
-	}
-}
