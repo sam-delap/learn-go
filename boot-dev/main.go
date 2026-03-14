@@ -1,24 +1,10 @@
 package main
 
-import "errors"
-
-func deleteIfNecessary(users map[string]user, name string) (deleted bool, err error) {
-	user, ok := users[name]
-	if !ok {
-		return false, errors.New("not found")
+func updateCounts(messagedUsers []string, validUsers map[string]int) {
+	for _, username := range messagedUsers {
+		val, ok := validUsers[username]; if ok {
+			validUsers[username] = val + 1
+		}
 	}
-
-	if !user.scheduledForDeletion {
-		return false, nil
-	}
-
-	delete(users, name)
-	return true, nil
-}
-
-type user struct {
-	name                 string
-	number               int
-	scheduledForDeletion bool
 }
 
