@@ -1,15 +1,21 @@
 package main
 
-func getMessageWithRetries(primary, secondary, tertiary string) ([3]string, [3]int) {
-	msgArray := [3]string{primary, secondary, tertiary}
-	costArray := [3]int{0, 0, 0}
+import (
+	"errors"
+)
 
-	msgCost := 0
-	for i := 0; i < len(msgArray); i++ {
-		msgCost += len(msgArray[i])
-		costArray[i] = msgCost
+const (
+	planFree = "free"
+	planPro  = "pro"
+)
+
+func getMessageWithRetriesForPlan(plan string, messages [3]string) ([]string, error) {
+	if plan == planPro {
+		return messages[:], nil
+	} else if plan == planFree {
+		return messages[:2], nil
+	} else {
+		return nil, errors.New("unsupported plan")
 	}
 
-	return msgArray, costArray
 }
-
