@@ -1,18 +1,9 @@
 package main
 
-func main() {
-	getMonthlyPrice("basic")
-}
-
-func getMonthlyPrice(tier string) int{
-	switch tier {
-	case "basic":
-		return 10000
-	case "premium":
-		return 15000
-	case "enterprise":
-		return 50000
-	default:
-		return 0
-	}
+func reformat(message string, formatter func(string) string) string {
+	message = formatter(message)
+	message = formatter(message)
+	message = formatter(message)
+	message = "TEXTIO: " + message
+	return message
 }
