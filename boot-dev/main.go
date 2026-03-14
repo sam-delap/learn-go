@@ -1,36 +1,21 @@
 package main
 
-import (
-	"strings"
-)
+import "errors"
 
-type sms struct {
-	id      string
-	content string
-	tags    []string
+func getUserMap(names []string, phoneNumbers []int) (map[string]user, error) {
+	if len(names) != len(phoneNumbers) {
+		return nil, errors.New("invalid sizes")
+	}
+	userMap := make(map[string]int)
+	for i, name := range names {
+		userMap[name] = phoneNumbers[i]
+	}
+
+	return userMap
 }
 
-func tagMessages(messages []sms, tagger func(sms) []string) []sms {
-	for i, msg := range messages {
-		messages[i].tags = tagger(msg)
-	}
-
-	return messages
-}
-
-func tagger(msg sms) []string {
-	tags := []string{}
-
-	lowerMsg := strings.ToLower(msg.content)
-
-	if strings.Contains(lowerMsg, "urgent") {
-		tags = append(tags, "Urgent")
-	}
-
-	if strings.Contains(lowerMsg, "sale") {
-		tags = append(tags, "Promo")
-	}
-
-	return tags
+type user struct {
+	name        string
+	phoneNumber int
 }
 
