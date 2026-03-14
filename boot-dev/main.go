@@ -1,13 +1,10 @@
 package main
 
-func getMessageCosts(messages []string) []float64 {
-	numMessages := len(messages)
-	msgCosts := make([]float64, numMessages, numMessages)
-
-	for i := 0; i < numMessages; i++ {
-		msgCosts[i] = float64(len(messages[i])) * 0.01
+func sum(nums ...int) int {
+	sumVal := 0
+	for i := 0; i < len(nums); i++ {
+		sumVal += nums[i]
 	}
 
-	return msgCosts
+	return sumVal
 }
-

@@ -7,28 +7,20 @@ import (
 
 func Test(t *testing.T) {
 	type testCase struct {
-		messages    []string
-		expected    []float64
-		expectedCap int
+		nums     []int
+		expected int
 	}
 
 	runCases := []testCase{
-		{
-			[]string{"Welcome to the movies!", "Enjoy your popcorn!"},
-			[]float64{0.22, 0.19},
-			2,
-		},
-		{
-			[]string{"I don't want to be here anymore", "Can we go home?", "I'm hungry", "I'm bored"},
-			[]float64{0.31, 0.15, 0.1, 0.09},
-			4,
-		},
+		{[]int{1, 2, 3}, 6},
+		{[]int{1, 2, 3, 4, 5}, 15},
 	}
 
 	submitCases := append(runCases, []testCase{
-		{[]string{}, []float64{}, 0},
-		{[]string{""}, []float64{0}, 1},
-		{[]string{"Hello", "Hi", "Hey"}, []float64{0.05, 0.02, 0.03}, 3},
+		{[]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, 55},
+		{[]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, 120},
+		{[]int{}, 0},
+		{[]int{5}, 5},
 	}...)
 
 	testCases := runCases
@@ -37,37 +29,30 @@ func Test(t *testing.T) {
 	}
 
 	skipped := len(submitCases) - len(testCases)
+
 	passCount := 0
 	failCount := 0
 
 	for _, test := range testCases {
-		output := getMessageCosts(test.messages)
-		if !slicesEqual(output, test.expected) || cap(output) != test.expectedCap {
+		output := sum(test.nums...)
+		if output != test.expected {
 			failCount++
 			t.Errorf(`---------------------------------
-Test Failed:
+Inputs:
 %v
-Expecting:
-%v
-expected cap: %v
-Actual:
-%v
-actual cap: %v
+Expecting:  %v
+Actual:     %v
 Fail
-`, sliceWithBullets(test.messages), sliceWithBullets(test.expected), test.expectedCap, sliceWithBullets(output), cap(output))
+`, sliceWithBullets(test.nums), test.expected, output)
 		} else {
 			passCount++
 			fmt.Printf(`---------------------------------
-Test Passed:
+Inputs:
 %v
-Expecting:
-%v
-expected cap: %v
-Actual:
-%v
-actual cap: %v
+Expecting:  %v
+Actual:     %v
 Pass
-`, sliceWithBullets(test.messages), sliceWithBullets(test.expected), test.expectedCap, sliceWithBullets(output), cap(output))
+`, sliceWithBullets(test.nums), test.expected, output)
 		}
 	}
 
@@ -77,7 +62,6 @@ Pass
 	} else {
 		fmt.Printf("%d passed, %d failed\n", passCount, failCount)
 	}
-
 }
 
 func sliceWithBullets[T any](slice []T) string {
@@ -96,18 +80,6 @@ func sliceWithBullets[T any](slice []T) string {
 		output += fmt.Sprintf(form, item)
 	}
 	return output
-}
-
-func slicesEqual(a, b []float64) bool {
-	if len(a) != len(b) {
-		return false
-	}
-	for i, v := range a {
-		if v != b[i] {
-			return false
-		}
-	}
-	return true
 }
 
 // withSubmit is set at compile time depending
