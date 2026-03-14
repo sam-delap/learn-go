@@ -5,30 +5,26 @@ import (
 	"testing"
 )
 
-func TestFilterMessages(t *testing.T) {
-	messages := []Message{
-		TextMessage{"Alice", "Hello, World!"},
-		MediaMessage{"Bob", "image", "A beautiful sunset"},
-		LinkMessage{"Charlie", "http://example.com", "Example Domain"},
-		TextMessage{"Dave", "Another text message"},
-		MediaMessage{"Eve", "video", "Cute cat video"},
-		LinkMessage{"Frank", "https://boot.dev", "Learn Coding Online"},
-	}
+func TestIsValidPassword(t *testing.T) {
 	type testCase struct {
-		filterType    string
-		expectedCount int
-		expectedType  string
+		password string
+		isValid  bool
 	}
 
 	runCases := []testCase{
-		{"text", 2, "text"},
-		{"media", 2, "media"},
-		{"link", 2, "link"},
+		{"Pass123", true},
+		{"pas", false},
+		{"Password", false},
+		{"123456", false},
 	}
 
 	submitCases := append(runCases, []testCase{
-		{"media", 2, "media"},
-		{"text", 2, "text"},
+		{"VeryLongPassword1", false},
+		{"Short", false},
+		{"1234short", false},
+		{"Short5", true},
+		{"P4ssword", true},
+		{"AA0Z9", true},
 	}...)
 
 	testCases := runCases
@@ -43,43 +39,23 @@ func TestFilterMessages(t *testing.T) {
 
 	for i, test := range testCases {
 		t.Run(fmt.Sprintf("TestCase%d", i+1), func(t *testing.T) {
-			filtered := filterMessages(messages, test.filterType)
-			if len(filtered) != test.expectedCount {
+			result := isValidPassword(test.password)
+			if result != test.isValid {
 				failCount++
 				t.Errorf(`---------------------------------
-Test Case %d - Filtering for %s
-Expecting:  %d messages
-Actual:     %d messages
+Password:  "%s"
+Expecting: %v
+Actual:    %v
 Fail
-`, i+1, test.filterType, test.expectedCount, len(filtered))
+`, test.password, test.isValid, result)
 			} else {
 				passCount++
 				fmt.Printf(`---------------------------------
-Test Case %d - Filtering for %s
-Expecting:  %d messages
-Actual:     %d messages
+Password:  "%s"
+Expecting: %v
+Actual:    %v
 Pass
-`, i+1, test.filterType, test.expectedCount, len(filtered))
-			}
-
-			for _, m := range filtered {
-				if m.Type() != test.expectedType {
-					failCount++
-					t.Errorf(`---------------------------------
-Test Case %d - Message Type Check
-Expecting:  %s message
-Actual:     %s message
-Fail
-`, i+1, test.expectedType, m.Type())
-				} else {
-					passCount++
-					fmt.Printf(`---------------------------------
-Test Case %d - Message Type Check
-Expecting:  %s message
-Actual:     %s message
-Pass
-`, i+1, test.expectedType, m.Type())
-				}
+`, test.password, test.isValid, result)
 			}
 		})
 	}
