@@ -8,7 +8,10 @@ func getUserMap(names []string, phoneNumbers []int) (map[string]user, error) {
 	}
 	userMap := make(map[string]int)
 	for i, name := range names {
-		userMap[name] = phoneNumbers[i]
+		userMap[name] = user{
+			name: name
+			phoneNumber: phoneNumbers[i]
+		}
 	}
 
 	return userMap
