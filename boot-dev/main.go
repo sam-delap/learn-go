@@ -1,11 +1,15 @@
 package main
 
-func countConnections(groupSize int) int {
-	numConnections := 0
-	for i := 1; i < groupSize; i++ {
-		numConnections += i
+func getMessageWithRetries(primary, secondary, tertiary string) ([3]string, [3]int) {
+	msgArray := [3]string{primary, secondary, tertiary}
+	costArray := [3]int{0, 0, 0}
+
+	msgCost := 0
+	for i := 0; i < len(msgArray); i++ {
+		msgCost += len(msgArray[i])
+		costArray[i] = msgCost
 	}
 
-	return numConnections
+	return msgArray, costArray
 }
 
