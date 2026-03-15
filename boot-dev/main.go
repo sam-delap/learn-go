@@ -1,24 +1,17 @@
 package main
 
-type Analytics struct {
-	MessagesTotal     int
-	MessagesFailed    int
-	MessagesSucceeded int
-}
+import (
+	"strings"
+)
 
-type Message struct {
-	Recipient string
-	Success   bool
-}
-
-// don't touch above this line
-
-func analyzeMessage(analysis *Analytics, msg Message) {
-	analysis.MessagesTotal += 1
-	if msg.Success {
-		analysis.MessagesSucceeded +=1
-	} else {
-		analysis.MessagesFailed += 1
+func removeProfanity(message *string) {
+	if message == nil {
+		return
 	}
+	messageVal := *message
+	messageVal = strings.ReplaceAll(messageVal, "fubb", "****")
+	messageVal = strings.ReplaceAll(messageVal, "shiz", "****")
+	messageVal = strings.ReplaceAll(messageVal, "witch", "*****")
+	*message = messageVal
 }
 
