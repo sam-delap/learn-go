@@ -1,18 +1,24 @@
 package main
 
-import "strings"
+type Analytics struct {
+	MessagesTotal     int
+	MessagesFailed    int
+	MessagesSucceeded int
+}
 
-func countDistinctWords(messages []string) int {
-	wordCounter := make(map[string]struct{})
-	for _, msg := range messages {
-		words := strings.Fields(strings.ToLower(msg))
-		for _, word := range words {
-			_, ok := wordCounter[word]; if !ok {
-				wordCounter[word] = struct{}{}
-			}
-		}
+type Message struct {
+	Recipient string
+	Success   bool
+}
+
+// don't touch above this line
+
+func analyzeMessage(analysis *Analytics, msg Message) {
+	analysis.MessagesTotal += 1
+	if msg.Success {
+		analysis.MessagesSucceeded +=1
+	} else {
+		analysis.MessagesFailed += 1
 	}
-
-	return len(wordCounter)
 }
 
