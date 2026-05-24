@@ -51,6 +51,7 @@ func Project (cmd *cobra.Command, args []string) error {
 		response := strings.ToLower(scanner.Text())
 
 		if response == "n" {
+			fmt.Println("Curses, foiled again!")
 			continue
 		}
 
@@ -60,7 +61,7 @@ func Project (cmd *cobra.Command, args []string) error {
 		
 		if response == "y" {
 			// do team-level pass/run play projection
-			// save those projects to the CSV file
+			// save those projections to the CSV file
 		}
 	}
 	return nil
